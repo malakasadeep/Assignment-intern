@@ -1,14 +1,21 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import React from "react";
+import Navbar from "./Components/NavBar";
+import HeroSection from "./Components/HeroSection";
+import SearchForm from "./Components/SearchForm";
+import HowItWorks from "./Components/HowItWorks";
+import Footer from "./Components/Footer";
 
-function App() {
+// Main App Component
+const App = () => {
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </>
+    <div className="min-h-screen">
+      <Navbar />
+      <HeroSection />
+      <SearchForm />
+      <HowItWorks />
+      <Footer />
+    </div>
   );
-}
+};
 
 export default App;
