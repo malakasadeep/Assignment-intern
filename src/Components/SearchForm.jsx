@@ -289,7 +289,7 @@ const FlightSearchForm = () => {
             results={arrivalResults}
             selectedCity={arrivalCity}
             setSelectedCity={setArrivalCity}
-            className="-ml-6 z-0"
+            className="-ml-6 z-5"
           />
 
           {/* Date Fields */}
