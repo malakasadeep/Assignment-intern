@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Airplay, Menu, Search, User, X } from "lucide-react";
+import { Airplay, Menu, PlaneIcon, Search, User, X } from "lucide-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,7 +26,7 @@ const Navbar = () => {
 
           {/* Logo */}
           <div className="text-2xl font-bold text-bg-primary md:mr-12 flex-grow-0 text-center md:text-left">
-            <Airplay />
+            <PlaneIcon className="text-5xl w-14 h-14" />
           </div>
 
           {/* Desktop navigation */}

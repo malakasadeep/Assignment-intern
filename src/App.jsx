@@ -8,7 +8,7 @@ import Footer from "./Components/Footer";
 // Main App Component
 const App = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-100">
       <Navbar />
       <HeroSection />
       <SearchForm />

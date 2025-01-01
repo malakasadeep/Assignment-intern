@@ -99,7 +99,7 @@ const VideoPlayer = () => {
       {/* Video Title Overlay */}
       <div className="absolute top-36 left-48 text-white z-10 justify-center items-center ">
         <h3 className="text-2xl font-bold mb-2">Costa Victoria Cochin</h3>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap- ml-9">
           <span className="text-sm">Maldives</span>
           <span className="text-sm">•</span>
           <span className="text-sm">3 Days + 3 Nights</span>
