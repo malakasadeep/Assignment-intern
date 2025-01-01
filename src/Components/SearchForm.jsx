@@ -282,7 +282,7 @@ const FlightSearchForm = () => {
           <button
             onClick={handleSearch}
             disabled={loading}
-            className="bg-bg-primary hover:bg-red-950 text-white px-8 py-3 w-48 rounded-full flex items-center space-x-4 transition-all duration-300 shadow-lg hover:shadow-xl relative "
+            className="bg-bg-primary hover:bg-red-950 text-white px-8 py-3 w-48 rounded-full flex items-center space-x-4 transition-all duration-300 shadow-lg hover:shadow-xl relative disabled:bg-red-950"
           >
             {loading ? "Searching..." : "Search Flight"}
             <div className="bg-white p-2 w-10 h-10 rounded-full flex items-center justify-center absolute right-1  transition-all">
