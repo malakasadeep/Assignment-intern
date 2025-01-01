@@ -97,7 +97,7 @@ const VideoPlayer = () => {
       </video>
 
       {/* Video Title Overlay */}
-      <div className="absolute top-36 left-48 text-white z-10 justify-center items-center ">
+      <div className="absolute top-36 left-48 text-white z-5 justify-center items-center ">
         <h3 className="text-2xl font-bold mb-2">Costa Victoria Cochin</h3>
         <div className="flex items-center gap- ml-9">
           <span className="text-sm">Maldives</span>
@@ -107,7 +107,7 @@ const VideoPlayer = () => {
       </div>
 
       {/* Video Controls */}
-      <div className="absolute inset-0 z-20 bg-black bg-opacity-20 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="absolute inset-0 z-10 bg-black bg-opacity-20 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity">
         {/* Center Play/Pause Button */}
         <div className="flex-1 flex items-center justify-center">
           <button

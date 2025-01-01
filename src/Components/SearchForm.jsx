@@ -7,11 +7,12 @@ import {
   Users,
 } from "lucide-react";
 import { format } from "date-fns";
-
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CityField from "./SearchFields/CityField";
 import CustomDateInput from "./SearchFields/CustomDateInput";
+import CustomAlert from "./SearchFields/CustomAlert";
+import SearchResults from "./SearchFields/SearchResults";
 
 const FlightSearchForm = () => {
   const [activeClass, setActiveClass] = useState("business");
@@ -30,6 +31,41 @@ const FlightSearchForm = () => {
   const [arrivalResults, setArrivalResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [searchResults, setSearchResults] = useState(null);
+  const [showResults, setShowResults] = useState(false);
+  const [alerts, setAlerts] = useState([]);
+
+  const addAlert = (message, type = "error") => {
+    const id = Date.now();
+    setAlerts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setAlerts((prev) => prev.filter((alert) => alert.id !== id));
+    }, 5000);
+  };
+
+  const validateForm = () => {
+    if (!departureCity) {
+      addAlert("Please select a departure city");
+      return false;
+    }
+    if (!arrivalCity) {
+      addAlert("Please select an arrival city");
+      return false;
+    }
+    if (!dates.departure) {
+      addAlert("Please select a departure date");
+      return false;
+    }
+    if (tripType === "roundtrip" && !dates.arrival) {
+      addAlert("Please select a return date");
+      return false;
+    }
+    if (!passengers || passengers < 1) {
+      addAlert("Please select at least 1 passenger");
+      return false;
+    }
+    return true;
+  };
 
   const [token, setToken] = useState(null);
   const handlePassengerChange = (e) => {
@@ -109,10 +145,10 @@ const FlightSearchForm = () => {
   }, [arrivalSearch, token]);
 
   const handleSearch = async () => {
-    if (!departureCity || !arrivalCity || !dates.departure) {
-      setError("Please fill in all required fields");
-      return;
-    }
+    if (!validateForm()) return;
+
+    setLoading(true);
+    setError(null);
 
     try {
       const response = await fetch(
@@ -123,7 +159,11 @@ const FlightSearchForm = () => {
         }&departureDate=${format(
           dates.departure,
           "yyyy-MM-dd"
-        )}&adults=${passengers}&travelClass=${activeClass.toUpperCase()}`,
+        )}&adults=${passengers}&travelClass=${activeClass.toUpperCase()}${
+          tripType === "roundtrip"
+            ? `&returnDate=${format(dates.arrival, "yyyy-MM-dd")}`
+            : ""
+        }`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -132,15 +172,41 @@ const FlightSearchForm = () => {
       );
 
       const data = await response.json();
-      // Handle the flight search results here
-      console.log(data);
+
+      if (data.errors) {
+        addAlert(data.errors[0]?.detail || "Failed to search flights");
+        return;
+      }
+
+      setSearchResults(data.data || []);
+      setShowResults(true);
+
+      if (!data.data?.length) {
+        addAlert("No flights found for your search criteria", "warning");
+      }
     } catch (err) {
-      setError("Failed to search flights");
+      addAlert("Failed to search flights");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="relative z-20 mx-auto -mt-36">
+      <div className="absolute top-0 left-0 right-0 z-50">
+        <div className="max-w-lg mx-auto space-y-2">
+          {alerts.map((alert) => (
+            <CustomAlert
+              key={alert.id}
+              message={alert.message}
+              type={alert.type}
+              onClose={() =>
+                setAlerts((prev) => prev.filter((a) => a.id !== alert.id))
+              }
+            />
+          ))}
+        </div>
+      </div>
       {/* Class Selection Tabs */}
       <div className="flex justify-center -space-x-4">
         {["BUSINESS CLASS", "FIRST CLASS"].map((classType) => (
@@ -291,6 +357,12 @@ const FlightSearchForm = () => {
           </button>
         </div>
       </div>
+      <SearchResults
+        isOpen={showResults}
+        onClose={() => setShowResults(false)}
+        results={searchResults}
+        loading={loading}
+      />
     </div>
   );
 };

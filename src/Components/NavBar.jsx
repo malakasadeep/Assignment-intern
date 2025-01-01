@@ -5,7 +5,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="fixed w-full top-0 z-50 font-sans font-light">
+    <nav className="fixed w-full top-0 z-30 font-sans font-light">
       {/* Glassmorphism background */}
       <div className="absolute inset-0 bg-bg-primary/25 backdrop-blur-md " />
 
