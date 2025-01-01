@@ -7,7 +7,7 @@ const Navbar = () => {
   return (
     <nav className="fixed w-full top-0 z-50 font-sans font-light">
       {/* Glassmorphism background */}
-      <div className="absolute inset-0 bg-white/5 backdrop-blur-md " />
+      <div className="absolute inset-0 bg-bg-primary/25 backdrop-blur-md " />
 
       {/* Main navbar content */}
       <div className="relative px-4 md:px-6 py-4">
@@ -26,7 +26,7 @@ const Navbar = () => {
 
           {/* Logo */}
           <div className="text-2xl font-bold text-bg-primary md:mr-12 flex-grow-0 text-center md:text-left">
-            <PlaneIcon className="text-5xl w-14 h-14" />
+            <PlaneIcon className="text-5xl w-12 h-12" />
           </div>
 
           {/* Desktop navigation */}
@@ -82,7 +82,7 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         <div
-          className={`absolute left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg transition-all duration-300 ease-in-out ${
+          className={`absolute left-0 right-0 bg-bg-primary/70 backdrop-blur-md shadow-lg transition-all duration-300 ease-in-out ${
             isMenuOpen ? "top-full opacity-100" : "-top-96 opacity-0"
           }`}
         >
@@ -91,7 +91,7 @@ const Navbar = () => {
               <a
                 key={item}
                 href="#"
-                className="block text-gray-800 hover:text-purple-700 hover:bg-purple-50 px-4 py-2 rounded-lg transition-colors duration-300"
+                className="block text-white hover:text-bg-primary hover:bg-purple-50 px-4 py-2 rounded-lg transition-colors duration-300"
               >
                 {item}
               </a>

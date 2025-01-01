@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from "react";
 import {
   ArrowLeftRight,
-  Calendar,
-  ChevronDown,
   PlaneLanding,
   PlaneTakeoff,
   Search,
   Users,
-  X,
 } from "lucide-react";
 import { format } from "date-fns";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import CityField from "./SearchFields/CityField";
+import CustomDateInput from "./SearchFields/CustomDateInput";
 
 const FlightSearchForm = () => {
   const [activeClass, setActiveClass] = useState("business");
   const [tripType, setTripType] = useState("roundtrip");
   const [departureCity, setDepartureCity] = useState(null);
   const [arrivalCity, setArrivalCity] = useState(null);
-  const [passengers, setPassengers] = useState(2);
+  const [passengers, setPassengers] = useState(null);
   const [dates, setDates] = useState({
     departure: new Date(),
     arrival: new Date(),
@@ -33,7 +32,12 @@ const FlightSearchForm = () => {
   const [error, setError] = useState(null);
 
   const [token, setToken] = useState(null);
-
+  const handlePassengerChange = (e) => {
+    const value = parseInt(e.target.value);
+    if (value >= 1 && value <= 9) {
+      setPassengers(value);
+    }
+  };
   // Get Amadeus access token
   useEffect(() => {
     const getToken = async () => {
@@ -103,102 +107,6 @@ const FlightSearchForm = () => {
 
     return () => clearTimeout(timer);
   }, [arrivalSearch, token]);
-
-  // Custom Input component for DatePicker
-  const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
-    <div
-      className="flex items-center border rounded-lg p-3 hover:border-bg-primary transition-colors cursor-pointer"
-      onClick={onClick}
-      ref={ref}
-    >
-      <Calendar className="w-5 h-5 text-gray-500" />
-      <span className="ml-2">{value}</span>
-      <ChevronDown className="ml-auto text-gray-400" />
-    </div>
-  ));
-
-  const CustomDateInput = React.forwardRef(({ value, onClick }, ref) => (
-    <div
-      className="flex items-center border rounded-lg p-3 hover:border-bg-primary transition-colors cursor-pointer h-16"
-      onClick={onClick}
-      ref={ref}
-    >
-      <Calendar className="w-5 h-5 text-gray-500" />
-      <span className="ml-2">{value}</span>
-      <ChevronDown className="ml-auto text-gray-400" />
-    </div>
-  ));
-
-  // City Selection Component
-  const CityField = ({
-    label,
-    icon: Icon,
-    searchValue,
-    setSearchValue,
-    results,
-    selectedCity,
-    setSelectedCity,
-    className = "",
-  }) => (
-    <div className={`w-5/12 md:w-1/5 relative ${className}`}>
-      <label className="block text-sm text-bg-primary mb-1">{label}</label>
-      {selectedCity ? (
-        <div className="flex items-center border rounded-lg p-3 hover:border-bg-primary transition-colors">
-          <span className="text-base font-bold flex items-center">
-            <Icon className="text-gray-500 mr-2" />
-            {selectedCity.iataCode}
-            <span className="text-4xl font-thin mx-2">|</span>
-          </span>
-          <div className="flex-grow">
-            <p className="font-bold">{selectedCity.cityName}</p>
-            <p className="text-sm text-gray-500">{selectedCity.name}</p>
-          </div>
-          <button
-            onClick={() => setSelectedCity(null)}
-            className="text-gray-400 hover:text-gray-600"
-          >
-            <X size={18} />
-          </button>
-        </div>
-      ) : (
-        <div className="relative">
-          <input
-            type="text"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            placeholder="Search city or airport"
-            className="w-full p-3 border rounded-lg focus:outline-none focus:border-bg-primary h-16"
-          />
-          {results.length > 0 && searchValue && (
-            <div className="absolute z-50 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto">
-              {results.map((result) => (
-                <button
-                  key={result.id}
-                  className="w-full p-2 text-left hover:bg-gray-100 flex items-center"
-                  onClick={() => {
-                    setSelectedCity({
-                      iataCode: result.iataCode,
-                      cityName: result.address.cityName,
-                      name: result.name,
-                    });
-                    setSearchValue("");
-                  }}
-                >
-                  <Icon className="text-gray-500 mr-2" size={16} />
-                  <div>
-                    <div className="font-semibold">
-                      {result.address.cityName}
-                    </div>
-                    <div className="text-sm text-gray-500">{result.name}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
 
   const handleSearch = async () => {
     if (!departureCity || !arrivalCity || !dates.departure) {
@@ -352,10 +260,17 @@ const FlightSearchForm = () => {
             <label className="block text-sm text-bg-primary mb-1">
               Passengers
             </label>
-            <div className="flex items-center border rounded-lg p-3 hover:border-bg-primary transition-colors h-16">
-              <Users className="w-5 h-5 text-gray-500" />
-              <span className="ml-2">{passengers} Passengers</span>
-              <ChevronDown className="ml-auto text-gray-400" />
+            <div className="relative flex items-center border rounded-lg hover:border-bg-primary transition-colors h-16">
+              <Users className="w-5 h-5 text-gray-500 ml-3" />
+              <input
+                type="number"
+                min="1"
+                max="9"
+                value={passengers}
+                onChange={handlePassengerChange}
+                className="w-16 p-3 focus:outline-none"
+              />
+              <span className="text-gray-500">Passengers</span>
             </div>
           </div>
         </div>
